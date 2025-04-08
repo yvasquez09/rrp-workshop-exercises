@@ -1,0 +1,10 @@
+name: alsf-rrp
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - fastp=0.24.0=h9ea9c2a_1
+  - isa-l=2.31.1=h6e16a3a_1
+  - libcxx=20.1.2=hf95d169_0
+  - libdeflate=1.23=he65b83e_0
+prefix: /Users/yvonnevasquez/miniforge3/envs/alsf-rrp
