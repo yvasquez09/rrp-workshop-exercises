@@ -9,8 +9,8 @@
 
 # Option descriptions:
 #
-# --maf :  File path to MAF file to be analyzed. Can be .gz compressed.
-# --outfile : The path of the output file to create
+# --maf:  File path to MAF file to be analyzed. Can be .gz compressed.
+# --outfile: The path of the output file to create
 # --vaf: Minimum variant allele fraction of mutations to include.
 # --min_depth: Minimum sequencing depth to call mutations.
 # --include_syn: Flag to include synonymous mutations in counts.
@@ -47,13 +47,13 @@ option_list <- list(
     opt_str = c("--vaf", "-v"),
     type = "numeric",
     default = 0.05,
-    help = "Minimum variant allele fraction to include (default 0.05)"
+    help = "Minimum variant allele fraction to include (default: %default)"
   ),
   make_option(
     opt_str = c("--min_depth", "-d"),
     type = "numeric",
     default = 0,
-    help = "Minimum sequencing depth to include (default 0)"
+    help = "Minimum sequencing depth to include (default: %default)"
   ),
   # This option is boolean, so can be invoked with just the flag and no following value
   make_option(
@@ -71,9 +71,9 @@ opts <- parse_args(OptionParser(option_list = option_list))
 
 # Check that the specified input files are present; 
 # exit with error if not using `stop()`
-if(!file.exists(opts$maf)){
-  stop("The specified MAF file does not exist.")
-}
+stopifnot(
+  "The specified MAF file does not exist." = file.exists(opts$maf)
+)
 
 
 # Define constants --------------------------------------
