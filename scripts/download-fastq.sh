@@ -13,13 +13,16 @@ FASTQ_R1="${RUN_ID}_1.fastq.gz"
 FASTQ_R2="${RUN_ID}_2.fastq.gz"
 FASTQ_URL="ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR115/089/${RUN_ID}"
 FASTQ_DEST="../data/raw/fastq/${STUDY_ID}"
+TRIMMED_DIR="../data/trimmed/${STUDY_ID}"
+REPORTS_DIR="../reports/fastp"
 
 # Create directory to hold FASTQ files from this project
 # .. moves you up a directory
 # -p is a flag for parent directory
 mkdir -p $FASTQ_DEST
+mkdir -p $TRIMMED_DIR $REPORTS_DIR
 
-if [ ! -e "${FASTQ_DEST}/${FASTQ_R1}" ]; then
+if [ ! -f "${FASTQ_DEST}/${FASTQ_R1}" ]; then
     # Download the R1 file
     curl -O ${FASTQ_URL}/${FASTQ_R1}
 
@@ -31,7 +34,7 @@ fi
 echo "The number of lines in $FASTQ_R1 is:"
 gunzip -c ${FASTQ_DEST}/${FASTQ_R1} | wc -l
 
-if [ ! -e "${FASTQ_DEST}/${FASTQ_R2}" ]; then
+if [ ! -f "${FASTQ_DEST}/${FASTQ_R2}" ]; then
     # Download the R2 file
     curl -O ${FASTQ_URL}/${FASTQ_R2}
 
@@ -42,3 +45,10 @@ fi
 # Count the lines in the R2 file
 echo "The number of lines in $FASTQ_R2 is:"
 gunzip -c ${FASTQ_DEST}/${FASTQ_R2} | wc -l
+
+fastp \
+    --in1 ${FASTQ_DEST}/${FASTQ_R1} \
+    --in2 ${FASTQ_DEST}/${FASTQ_R2} \
+    --out1 ${TRIMMED_DIR}/${FASTQ_R1} \
+    --out2 ${TRIMMED_DIR}/${FASTQ_R2} \
+    --html "${REPORTS_DIR}/${STUDY_ID}_report.html"
